@@ -2,10 +2,14 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 
-export const ListTodos = ({ todos }) => (
+import { Link } from '../../htmy'
+
+export const ListTodos = ({ project }) => (
   <ul>
-    {todos.map((todo) => (
-      <li id={`todo-${todo.id}`}>{todo.text}</li>
+    {project.todos.map((todo) => (
+      <li id={`todo-${todo.id}`}>
+        <Link href={`/projects/${project.id}/todo/${todo.id}`}>{todo.text}</Link>
+      </li>
     ))}
   </ul>
 )
@@ -13,5 +17,7 @@ export const ListTodos = ({ todos }) => (
 export const ViewTodo = ({ todo }) => (
   <div>
     <h2>{todo.text}</h2>
+    <button>Edit</button>
+    <button>Delete</button>
   </div>
 )

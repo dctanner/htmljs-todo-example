@@ -18,7 +18,7 @@ export const ListProjects = ({ projects }) => (
 export const ViewProject = ({ project, children }) => (
   <div>
     <h1>{project.text}</h1>
-    <ListTodos todos={project.todos} />
+    <ListTodos project={project} />
     <div>
       <h2>Todo detail area</h2>
       {children}

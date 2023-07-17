@@ -1,3 +1,4 @@
+import { html } from 'hono/html'
 import AppLayout from './app/layouts/app.js'
 
 // TODO create our own extension of Hono's class, that lets you set a default route layout and automatically wraps html/jsx returned from a route in this layout() function
@@ -33,4 +34,10 @@ export const layout = (c, templates, props = {}) => {
     }, '')
     return c.html(template)
   }
+}
+
+export const Link = ({ href, children }) => {
+  return html`
+    <a href="${href}">${children}</a>
+  `
 }
