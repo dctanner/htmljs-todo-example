@@ -17,14 +17,9 @@ const TodoLayout = (props) => html`
 
 const todoRoute = new Hono()
 
-todoRoute.get('/', (c) => {
-  const todos = [
-    { id: 1, text: 'Buy milk' },
-    { id: 2, text: 'Buy eggs' },
-    { id: 3, text: 'Buy bread' },
-  ]
+todoRoute.get('/:id', (c) => {
   // Render jsx, either using an imported view function or just write the jsx inline here
-  return layout(c, <ListTodos todos={todos} />, TodoLayout, { title: 'Todos' })
+  // return layout(c, <ListTodos todos={todos} />, TodoLayout, { title: 'Todos' })
   // You can also render by calling the view function
   // return layout(c, ListTodos({ todos }), TodoLayout)
   // Or using a html literal

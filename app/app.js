@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
-import todoRoute from './routes/todo'
+import projectRoute from './routes/projects'
 
 const app = new Hono()
 
 app.get('/', (c) => c.text('Hello Hono!'))
-app.route('/todo', todoRoute)
+app.route('/projects', projectRoute)
 
 export default app
