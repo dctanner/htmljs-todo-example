@@ -29,6 +29,7 @@ const PROJECTS = [
 // TODO find a way to pull out the view's props and pass them here too
 const ProjectsLayout = (props) => html`
 <main>
+  <h1>My Todo App</h1>
   ${props.children}
 </main>
 `

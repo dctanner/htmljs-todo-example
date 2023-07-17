@@ -7,8 +7,8 @@ export const layout = (c, templates, props = {}) => {
     // We check if the req is for the whole body or just a partial, then include the Layout or not
     // TODO hoist applLayoutProps values like title into the head with some custom htmx that works like https://htmx.org/docs/#oob_swaps but on the <head>
     if (c.req.header('HX-Target') === 'body') {
-      // Render each template in reverse order, passing the previous template as the children prop
-      const template = templates.reduceRight((children, template) => {
+      // Render each template passing the previous template as the children prop
+      const template = templates.reduce((children, template) => {
         return template({
           ...props,
           children,
@@ -24,8 +24,8 @@ export const layout = (c, templates, props = {}) => {
     // Req is a normal request, so we render the whole page
     // Add in the AppLayout to the end of the templates array
     templates.push(AppLayout)
-    // Render each template in reverse order, passing the previous template as the children prop
-    const template = templates.reduceRight((children, template) => {
+    // Render each template passing the previous template as the children prop
+    const template = templates.reduce((children, template) => {
       return template({
         ...props,
         children,
