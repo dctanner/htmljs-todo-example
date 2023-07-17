@@ -22,9 +22,9 @@ export const ViewTodo = ({ project, todo }) => (
   </div>
 )
 
-export const EditTodo = ({ todo }) => (
-  <form>
-    <input type="text" value={todo.text} />
-    <button>Save</button>
+export const EditTodo = ({ project, todo }) => (
+  <form hx-put={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">
+    <input type="text" name="text" value={todo.text} />
+    <button type="submit">Save</button>
   </form>
 )

@@ -8,7 +8,7 @@ import { html } from 'hono/html'
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 
-const PROJECTS = [
+let PROJECTS = [
   {
     id: 0, text: 'Shopping List', todos: [
       { id: 0, text: 'Buy milk' },
@@ -67,6 +67,21 @@ projectsRoute.get('/:projectId/todos/:todoId/edit', (c) => {
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
   return layout(c, [EditTodo, ViewProject, ProjectsLayout], {
+    title: `Edit ${todo.text}`,
+    project,
+    todo,
+  })
+})
+projectsRoute.put('/:projectId/todos/:todoId', async (c) => {
+  const { projectId, todoId } = c.req.param()
+  // Here we would update the todo in the db
+  const data = await c.req.parseBody()
+  PROJECTS[projectId].todos[todoId].text = data.text
+
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
+  // TODO we must revalidate ViewProjec to refesh the list of todos
+  return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
     title: `Edit ${todo.text}`,
     project,
     todo,
