@@ -2,7 +2,7 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 
-import { Link } from '../../htmy'
+import { Link, Form } from '../../htmy'
 
 export const ListTodos = ({ project }) => (
   <ul>
@@ -23,8 +23,9 @@ export const ViewTodo = ({ project, todo }) => (
 )
 
 export const EditTodo = ({ project, todo }) => (
-  <form hx-put={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">
+  // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
+  <Form action={`/projects/${project.id}/todos/${todo.id}`} method="put">
     <input type="text" name="text" value={todo.text} />
     <button type="submit">Save</button>
-  </form>
+  </Form>
 )

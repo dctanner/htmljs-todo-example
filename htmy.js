@@ -43,3 +43,20 @@ export const Link = ({ to, "hx-target": hxTarget, children }) => {
     return html`<a href="${to}" hx-boost="true">${children}</a>`
   }
 }
+
+export const Form = ({ action, method, "hx-target": hxTarget, children }) => {
+  if (hxTarget) {
+    switch (method) {
+      case "get":
+        return html`<form hx-get="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+      case "post":
+        return html`<form hx-post="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+      case "put":
+        return html`<form hx-put="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+      case "delete":
+        return html`<form hx-delete="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+    }
+  } else {
+    return html`<form action="${action}" method="${method}" hx-boost="true">${children}</form>`
+  }
+}

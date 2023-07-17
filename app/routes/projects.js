@@ -80,7 +80,7 @@ projectsRoute.put('/:projectId/todos/:todoId', async (c) => {
 
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
-  // TODO we must revalidate ViewProjec to refesh the list of todos
+  // TODO we must revalidate ViewProject to refesh the list of todos
   return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
     title: `Edit ${todo.text}`,
     project,
