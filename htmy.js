@@ -39,7 +39,7 @@ export const layout = (c, templates, props = {}) => {
 
 export const Link = ({ to, replace, children }) => {
   if (replace) {
-    return html`<a href="${to}" hx-get="${to}" hx-target="${replace}">${children}</a>`
+    return html`<a href="${to}" hx-get="${to}" hx-target="${replace}" hx-push-url="true">${children}</a>`
   } else {
     return html`<a href="${to}" hx-boost="true">${children}</a>`
   }
