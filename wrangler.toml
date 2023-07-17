@@ -1,0 +1,3 @@
+name = "my-app"
+main = "app/app.js"
+compatibility_date = "2023-01-01"
