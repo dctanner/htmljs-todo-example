@@ -8,7 +8,7 @@ export const ListTodos = ({ project }) => (
   <ul>
     {project.todos.map((todo) => (
       <li id={`todo-${todo.id}`}>
-        <Link href={`/projects/${project.id}/todo/${todo.id}`}>{todo.text}</Link>
+        <Link to={`/projects/${project.id}/todo/${todo.id}`} replace="#ViewProjectChildren">{todo.text}</Link>
       </li>
     ))}
   </ul>

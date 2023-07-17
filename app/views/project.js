@@ -6,7 +6,7 @@ import { Link } from '../../htmy'
 import { ListTodos } from './todo'
 
 export const ListProjects = ({ projects }) => (
-  <div id="ListProjects">
+  <div>
     <h1>Projects</h1>
     <ul>
       {projects.map((project) => (
@@ -19,13 +19,13 @@ export const ListProjects = ({ projects }) => (
 )
 
 export const ViewProject = ({ project, children }) => (
-  <div id="ViewProject">
+  <div>
     <Link to="/projects">&laquo; Back to all projects</Link>
     <h1>{project.text}</h1>
     <ListTodos project={project} />
     <div>
       <h2>Todo detail area</h2>
-      {children}
+      <div id="ViewProjectChildren">{children}</div>
     </div>
   </div>
 )
