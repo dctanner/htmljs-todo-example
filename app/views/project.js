@@ -23,9 +23,6 @@ export const ViewProject = ({ project, children }) => (
     <Link to="/projects">&laquo; Back to all projects</Link>
     <h1>{project.text}</h1>
     <ListTodos project={project} />
-    <div>
-      <h2>Todo detail area</h2>
-      <div id="ViewProjectChildren">{children}</div>
-    </div>
+    <div id="ViewProjectChildren">{children}</div>
   </div>
 )

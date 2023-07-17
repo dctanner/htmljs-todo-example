@@ -38,7 +38,7 @@ export const layout = (c, templates, props = {}) => {
 
 export const Link = ({ to, "hx-target": hxTarget, children }) => {
   if (hxTarget) {
-    return html`<a href="${to}" hx-get="${to}" hx-target="${hxTarget}" hx-push-url="true">${children}</a>`
+    return html`<a href="${to}" hx-get="${to}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</a>`
   } else {
     return html`<a href="${to}" hx-boost="true">${children}</a>`
   }
@@ -48,13 +48,13 @@ export const Form = ({ action, method, "hx-target": hxTarget, children }) => {
   if (hxTarget) {
     switch (method) {
       case "get":
-        return html`<form hx-get="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+        return html`<form hx-get="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "post":
-        return html`<form hx-post="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+        return html`<form hx-post="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "put":
-        return html`<form hx-put="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+        return html`<form hx-put="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "delete":
-        return html`<form hx-delete="${action}" hx-target="${hxTarget}" hx-push-url="true">${children}</form>`
+        return html`<form hx-delete="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
     }
   } else {
     return html`<form action="${action}" method="${method}" hx-boost="true">${children}</form>`
