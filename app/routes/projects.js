@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { ListProjects, ViewProject } from '../views/project'
-import { ViewTodo } from '../views/todo'
+import { ViewTodo, EditTodo } from '../views/todo'
 import { layout } from '../../htmy'
 // import todoRoute from './todos'
 import { html } from 'hono/html'
@@ -51,13 +51,23 @@ projectsRoute.get('/:projectId', (c) => {
     project,
   })
 })
-// projectRoute.route('/:projectId/todos', todoRoute) // Move route below to its own file and mount here
-projectsRoute.get('/:projectId/todo/:todoId', (c) => {
+// projectRoute.route('/:projectId/todos', todosRoute) // Move routes below to its own file and mount here
+projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
   return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
     title: `${project.text} - ${todo.text}`,
+    project,
+    todo,
+  })
+})
+projectsRoute.get('/:projectId/todos/:todoId/edit', (c) => {
+  const { projectId, todoId } = c.req.param()
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
+  return layout(c, [EditTodo, ViewProject, ProjectsLayout], {
+    title: `Edit ${todo.text}`,
     project,
     todo,
   })
