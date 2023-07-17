@@ -4,10 +4,10 @@ import AppLayout from './app/layouts/app.js'
 // TODO create our own extension of Hono's class, that lets you set a default route layout and automatically wraps html/jsx returned from a route in this layout() function
 // template is an array of html/jsx literals, the first is the final view to render and never takes the children prop, every additional array item is a layout component that must take the children prop
 export const layout = (c, templates, props = {}) => {
-  if (c.req.header('HX-Request')) { // TODO should we also check for ajax req here?
+  if (c.req.header('HX-Request') === 'true') { // TODO should we also check for ajax req here?
     // We check if the req is for the whole body or just a partial, then include the Layout or not
     // TODO hoist applLayoutProps values like title into the head with some custom htmx that works like https://htmx.org/docs/#oob_swaps but on the <head>
-    if (c.req.header('HX-Target') === 'body') {
+    if (c.req.header('HX-Boosted') === 'true') {
       // Render each template passing the previous template as the children prop
       const template = templates.reduce((children, template) => {
         return template({
@@ -38,6 +38,6 @@ export const layout = (c, templates, props = {}) => {
 
 export const Link = ({ href, children }) => {
   return html`
-    <a href="${href}">${children}</a>
+    <a href="${href}" hx-boost="true">${children}</a>
   `
 }
