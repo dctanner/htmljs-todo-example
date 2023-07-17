@@ -6,12 +6,12 @@ import { Link } from '../../htmy'
 import { ListTodos } from './todo'
 
 export const ListProjects = ({ projects }) => (
-  <div>
+  <div id="ListProjects">
     <h1>Projects</h1>
     <ul>
       {projects.map((project) => (
         <li id={`todo-${project.id}`}>
-          <Link href={`/projects/${project.id}`}>{project.text}</Link>
+          <Link to={`/projects/${project.id}`}>{project.text}</Link>
         </li>
       ))}
     </ul>
@@ -19,8 +19,8 @@ export const ListProjects = ({ projects }) => (
 )
 
 export const ViewProject = ({ project, children }) => (
-  <div>
-    <Link href="/projects">&laquo; Back to all projects</Link>
+  <div id="ViewProject">
+    <Link to="/projects">&laquo; Back to all projects</Link>
     <h1>{project.text}</h1>
     <ListTodos project={project} />
     <div>
