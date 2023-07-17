@@ -36,6 +36,7 @@ const ProjectsLayout = (props) => html`
 
 const projectsRoute = new Hono()
 
+// TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
 projectsRoute.get('/', (c) => {
   const projects = PROJECTS
   return layout(c, [ListProjects, ProjectsLayout], {
