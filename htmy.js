@@ -36,11 +36,11 @@ export const layout = (c, templates, props = {}) => {
   }
 }
 
-export const Link = ({ to, "hx-target": hxTarget, children }) => {
+export const Link = ({ to, "hx-target": hxTarget, "class": className, children }) => {
   if (hxTarget) {
-    return html`<a href="${to}" hx-get="${to}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</a>`
+    return html`<a href="${to}" class="${className}" hx-get="${to}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</a>`
   } else {
-    return html`<a href="${to}" hx-boost="true">${children}</a>`
+    return html`<a href="${to}" class="${className}" hx-boost="true">${children}</a>`
   }
 }
 

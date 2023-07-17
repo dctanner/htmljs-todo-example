@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "dev": "wrangler dev --log-level",
-    "deploy": "wrangler deploy"
+    "dev": "wrangler dev --assets ./public --log-level",
+    "dev:css": "tailwindcss -i ./app/app.css -o ./public/app.css --watch",
+    "deploy": "tailwindcss -i ./app/app.css -o ./public/app.css --minify && wrangler deploy --assets ./public"
   },
   "dependencies": {
     "drizzle-orm": "^0.27.2",
@@ -10,6 +11,7 @@
   "devDependencies": {
     "daisyui": "^3.2.1",
     "drizzle-kit": "^0.19.6",
+    "tailwindcss": "^3.3.3",
     "wrangler": "^3.1.2"
   }
 }

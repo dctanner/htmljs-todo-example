@@ -19,6 +19,9 @@ devDependencies:
   drizzle-kit:
     specifier: ^0.19.6
     version: 0.19.6
+  tailwindcss:
+    specifier: ^3.3.3
+    version: 3.3.3
   wrangler:
     specifier: ^3.1.2
     version: 3.1.2

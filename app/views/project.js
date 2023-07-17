@@ -11,7 +11,7 @@ export const ListProjects = ({ projects }) => (
     <ul>
       {projects.map((project) => (
         <li id={`todo-${project.id}`}>
-          <Link to={`/projects/${project.id}`}>{project.text}</Link>
+          <Link class="link link-primary" to={`/projects/${project.id}`}>{project.text}</Link>
         </li>
       ))}
     </ul>
@@ -20,7 +20,7 @@ export const ListProjects = ({ projects }) => (
 
 export const ViewProject = ({ project, children }) => (
   <div>
-    <Link to="/projects">&laquo; Back to all projects</Link>
+    <Link class="link link-primary" to="/projects">&laquo; Back to all projects</Link>
     <h1>{project.text}</h1>
     <ListTodos project={project} />
     <div id="ViewProjectChildren">{children}</div>
