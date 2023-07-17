@@ -5,16 +5,23 @@ import { jsx } from 'hono/jsx'
 import { ListTodos } from './todo'
 
 export const ListProjects = ({ projects }) => (
-  <ul>
-    {projects.map((project) => (
-      <li id={`todo-${project.id}`}>{project.text}</li>
-    ))}
-  </ul>
+  <div>
+    <h1>Projects</h1>
+    <ul>
+      {projects.map((project) => (
+        <li id={`todo-${project.id}`}>{project.text}</li>
+      ))}
+    </ul>
+  </div>
 )
 
-export const ViewProject = ({ project }) => (
+export const ViewProject = ({ project, children }) => (
   <div>
-    <h2>{project.text}</h2>
+    <h1>{project.text}</h1>
     <ListTodos todos={project.todos} />
+    <div>
+      <h2>Todo detail area</h2>
+      {children}
+    </div>
   </div>
 )

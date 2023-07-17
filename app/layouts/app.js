@@ -6,6 +6,9 @@ const AppLayout = (props) => html`
   <meta charset="UTF-8">
   <title>${props.title}</title>
   <meta name="description" content="${props.description}">
+  <style type="text/css">
+
+  </style>
 </head>
 <body>
   ${props.children}

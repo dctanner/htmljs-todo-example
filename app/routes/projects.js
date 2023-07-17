@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { ListProjects, ViewProject } from '../views/project'
+import { ViewTodo } from '../views/todo'
 import { layout } from '../../htmy'
-import todoRoute from './todos'
+// import todoRoute from './todos'
 import { html } from 'hono/html'
 /** @jsx jsx */
 /** @jsxFrag  Fragment */
@@ -26,24 +27,39 @@ const PROJECTS = [
 
 // Route layouts get passed the same props as the route's view
 // TODO find a way to pull out the view's props and pass them here too
-const ProjectLayout = (props) => html`
+const ProjectsLayout = (props) => html`
 <main>
-  <h1>Projects</h1>
   ${props.children}
 </main>
 `
 
-const projectRoute = new Hono()
+const projectsRoute = new Hono()
 
-projectRoute.get('/', (c) => {
+projectsRoute.get('/', (c) => {
   const projects = PROJECTS
-  return layout(c, <ListProjects projects={projects} />, ProjectLayout, { title: 'Projects' })
+  return layout(c, [ListProjects, ProjectsLayout], {
+    title: 'Projects',
+    projects,
+  })
 })
-projectRoute.get('/:id', (c) => {
-  const { id } = c.req.param()
-  const project = PROJECTS[id]
-  return layout(c, <ViewProject project={project} />, ProjectLayout, { title: project.text })
+projectsRoute.get('/:projectId', (c) => {
+  const { projectId } = c.req.param()
+  const project = PROJECTS[projectId]
+  return layout(c, [ViewProject, ProjectsLayout], {
+    title: project.text,
+    project,
+  })
 })
-// projectRoute.route('/todo', todoRoute)
+// projectRoute.route('/:projectId/todos', todoRoute) // Move route below to its own file and mount here
+projectsRoute.get('/:projectId/todo/:todoId', (c) => {
+  const { projectId, todoId } = c.req.param()
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
+  return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
+    title: `${project.text} - ${todo.text}`,
+    project,
+    todo,
+  })
+})
 
-export default projectRoute
+export default projectsRoute

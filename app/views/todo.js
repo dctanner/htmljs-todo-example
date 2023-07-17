@@ -9,3 +9,9 @@ export const ListTodos = ({ todos }) => (
     ))}
   </ul>
 )
+
+export const ViewTodo = ({ todo }) => (
+  <div>
+    <h2>{todo.text}</h2>
+  </div>
+)
