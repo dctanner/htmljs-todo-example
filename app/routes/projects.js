@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { ListProjects, ViewProject } from '../views/project'
 import { ViewTodo, EditTodo } from '../views/todo'
 import MainLayout from '../layouts/main'
+import AppLayout from '../layouts/app'
 import { layout } from '../../htmy'
 // import todoRoute from './todos'
 import { html } from 'hono/html'
@@ -30,6 +31,7 @@ let PROJECTS = [
 // TODO find a way to pull out the view's props and pass them here too
 const ProjectsLayout = (props) => html`
 <div class="p-6">
+  <h1 class="text-2xl">Projects Layout</h1>
   ${props.children}
 </div>
 `
@@ -37,12 +39,22 @@ const ProjectsLayout = (props) => html`
 const projectsRoute = new Hono()
 
 // TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
+projectsRoute.use('/*', async (c, next) => {
+  await next()
+  const curBody = await c.res.text()
+  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
+  c.res = c.html(AppLayout({ children: html(curBody) }))
+})
+projectsRoute.use('/*', async (c, next) => {
+  await next()
+  const curBody = await c.res.text()
+  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
+  c.res = c.html(MainLayout({ children: html(curBody) }))
+})
 projectsRoute.get('/', (c) => {
   const projects = PROJECTS
-  return layout(c, [ListProjects, ProjectsLayout, MainLayout], {
-    title: 'Projects',
-    projects,
-  })
+  // return c.text`get / Projects Route`
+  return c.html(ListProjects({ projects }))
 })
 projectsRoute.get('/:projectId', (c) => {
   const { projectId } = c.req.param()
