@@ -45,6 +45,7 @@ projectsRoute.get('/', (c) => {
   // return c.text`get / Projects Route`
   return c.html(ListProjects({ projects }))
 })
+// TODO extend layout() to make a new fn that can take an anon fn, that is passd children, and does the route logic and rendering with the optional children
 projectsRoute.get('/:projectId/*', async (c, next) => {
   await next()
   const { projectId } = c.req.param()
@@ -55,7 +56,6 @@ projectsRoute.get('/:projectId/*', async (c, next) => {
   c.res = c.html(ViewProject({ project, children: html(curBody) }))
   // layout(ViewProject({ project }))
 })
-// TODO how do we get this to render the ViewProject layout as well when you do a full page load?
 projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
