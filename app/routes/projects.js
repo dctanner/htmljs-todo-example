@@ -40,12 +40,12 @@ const projectsRoute = new Hono()
 
 // TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
 projectsRoute.use('/*', layout(MainLayout))
-// TODO maybe create view() fn like layout to use below, so that we can always return just the html and not have to remember to call c.html()
 projectsRoute.get('/', (c) => {
   const projects = PROJECTS
   // return c.text`get / Projects Route`
   return c.html(ListProjects({ projects }))
 })
+// TODO write examples of the two routes below, but returning JSX inline, and also extractin into its own component and calling like layout(ViewProject)
 // Example of a route that also functions as a layout
 projectsRoute.get('/:projectId/*', layout(({ context, children }) => {
   const { projectId } = context.req.param()
