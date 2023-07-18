@@ -39,18 +39,7 @@ const ProjectsLayout = (props) => html`
 const projectsRoute = new Hono()
 
 // TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
-projectsRoute.use('/*', async (c, next) => {
-  await next()
-  const curBody = await c.res.text()
-  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
-  c.res = c.html(AppLayout({ children: html(curBody) }))
-})
-projectsRoute.use('/*', async (c, next) => {
-  await next()
-  const curBody = await c.res.text()
-  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
-  c.res = c.html(MainLayout({ children: html(curBody) }))
-})
+projectsRoute.use('/*', layout(MainLayout))
 projectsRoute.get('/', (c) => {
   const projects = PROJECTS
   // return c.text`get / Projects Route`
@@ -59,21 +48,17 @@ projectsRoute.get('/', (c) => {
 projectsRoute.get('/:projectId', (c) => {
   const { projectId } = c.req.param()
   const project = PROJECTS[projectId]
-  return layout(c, [ViewProject, ProjectsLayout, MainLayout], {
-    title: project.text,
-    project,
-  })
+  return c.html(ViewProject({ project }))
 })
 // projectRoute.route('/:projectId/todos', todosRoute) // Move routes below to its own file and mount here
 projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
-  return layout(c, [ViewTodo, ViewProject, ProjectsLayout, MainLayout], {
-    title: `${project.text} - ${todo.text}`,
+  return c.html(ViewTodo({
     project,
     todo,
-  })
+  }))
 })
 projectsRoute.get('/:projectId/todos/:todoId/edit', (c) => {
   const { projectId, todoId } = c.req.param()
