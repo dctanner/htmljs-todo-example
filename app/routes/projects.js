@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { ListProjects, ViewProject } from '../views/project'
 import { ViewTodo, EditTodo } from '../views/todo'
+import MainLayout from '../layouts/main'
 import { layout } from '../../htmy'
 // import todoRoute from './todos'
 import { html } from 'hono/html'
@@ -28,10 +29,9 @@ let PROJECTS = [
 // Route layouts get passed the same props as the route's view
 // TODO find a way to pull out the view's props and pass them here too
 const ProjectsLayout = (props) => html`
-<main>
-  <h1>My Todo App</h1>
+<div class="p-6">
   ${props.children}
-</main>
+</div>
 `
 
 const projectsRoute = new Hono()
@@ -39,7 +39,7 @@ const projectsRoute = new Hono()
 // TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
 projectsRoute.get('/', (c) => {
   const projects = PROJECTS
-  return layout(c, [ListProjects, ProjectsLayout], {
+  return layout(c, [ListProjects, ProjectsLayout, MainLayout], {
     title: 'Projects',
     projects,
   })
@@ -47,7 +47,7 @@ projectsRoute.get('/', (c) => {
 projectsRoute.get('/:projectId', (c) => {
   const { projectId } = c.req.param()
   const project = PROJECTS[projectId]
-  return layout(c, [ViewProject, ProjectsLayout], {
+  return layout(c, [ViewProject, ProjectsLayout, MainLayout], {
     title: project.text,
     project,
   })
@@ -57,7 +57,7 @@ projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
-  return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
+  return layout(c, [ViewTodo, ViewProject, ProjectsLayout, MainLayout], {
     title: `${project.text} - ${todo.text}`,
     project,
     todo,
@@ -67,7 +67,7 @@ projectsRoute.get('/:projectId/todos/:todoId/edit', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
-  return layout(c, [EditTodo, ViewProject, ProjectsLayout], {
+  return layout(c, [EditTodo, ViewProject, ProjectsLayout, MainLayout], {
     title: `Edit ${todo.text}`,
     project,
     todo,
@@ -82,7 +82,7 @@ projectsRoute.put('/:projectId/todos/:todoId', async (c) => {
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
   // TODO we must revalidate ViewProject to refesh the list of todos
-  return layout(c, [ViewTodo, ViewProject, ProjectsLayout], {
+  return layout(c, [ViewTodo, ViewProject, ProjectsLayout, MainLayout], {
     title: `Edit ${todo.text}`,
     project,
     todo,

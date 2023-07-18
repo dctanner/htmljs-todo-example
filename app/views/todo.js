@@ -5,10 +5,10 @@ import { jsx } from 'hono/jsx'
 import { Link, Form } from '../../htmy'
 
 export const ListTodos = ({ project }) => (
-  <ul>
+  <ul class="menu bg-base-100">
     {project.todos.map((todo) => (
       <li id={`todo-${todo.id}`}>
-        <Link class="link link-primary" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.text}</Link>
+        <Link class="text-blue-500" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.text}</Link>
       </li>
     ))}
   </ul>
@@ -16,7 +16,7 @@ export const ListTodos = ({ project }) => (
 
 export const ViewTodo = ({ project, todo }) => (
   <div>
-    <h2>{todo.text}</h2>
+    <h2 class="text-xl">{todo.text}</h2>
     <button class="btn" hx-get={`/projects/${project.id}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
     <button class="btn btn-outline">Delete</button>
   </div>
