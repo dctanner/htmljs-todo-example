@@ -1,8 +1,9 @@
 ```
-npm install
-npm run dev
+pnpm install
+pnpm run dev
+pnpm run dev:css
 ```
 
 ```
-npm run deploy
+pnpm run deploy
 ```
