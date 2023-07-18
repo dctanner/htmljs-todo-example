@@ -36,6 +36,11 @@ import AppLayout from './app/layouts/app.js'
 //   }
 // }
 
+export const view = (viewToRender) => {
+  return (c) => {
+    return c.html(viewToRender({ context: c }))
+  }
+}
 
 export const rootLayout = (layoutToApply) => {
   return async (c, next) => {
