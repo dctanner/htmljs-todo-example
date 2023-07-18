@@ -57,7 +57,7 @@ export const layout = (layoutToApply) => {
       // Req is boosted link, so we apply layouts
       const curBody = await c.res.text()
       c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
-      c.res = c.html(layoutToApply({ children: html(curBody) }))
+      c.res = c.html(layoutToApply({ context: c, children: html(curBody) }))
     }
     // Else do nothing and let the original response be sent, which will be a partial update applied to the page with hx-target
   }

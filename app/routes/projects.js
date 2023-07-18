@@ -45,17 +45,13 @@ projectsRoute.get('/', (c) => {
   // return c.text`get / Projects Route`
   return c.html(ListProjects({ projects }))
 })
-// TODO extend layout() to make a new fn that can take an anon fn, that is passd children, and does the route logic and rendering with the optional children
-projectsRoute.get('/:projectId/*', async (c, next) => {
-  await next()
+// Example of a route that also funcitons as a layout
+projectsRoute.get('/:projectId/*', layout(({ context: c, children }) => {
   const { projectId } = c.req.param()
   const project = PROJECTS[projectId]
 
-  const curBody = await c.res.text()
-  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
-  c.res = c.html(ViewProject({ project, children: html(curBody) }))
-  // layout(ViewProject({ project }))
-})
+  return ViewProject({ project, children })
+}))
 projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
