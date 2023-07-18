@@ -45,12 +45,17 @@ projectsRoute.get('/', (c) => {
   // return c.text`get / Projects Route`
   return c.html(ListProjects({ projects }))
 })
-projectsRoute.get('/:projectId', (c) => {
+projectsRoute.get('/:projectId/*', async (c, next) => {
+  await next()
   const { projectId } = c.req.param()
   const project = PROJECTS[projectId]
-  return c.html(ViewProject({ project }))
+
+  const curBody = await c.res.text()
+  c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
+  c.res = c.html(ViewProject({ project, children: html(curBody) }))
+  // layout(ViewProject({ project }))
 })
-// projectRoute.route('/:projectId/todos', todosRoute) // Move routes below to its own file and mount here
+// TODO how do we get this to render the ViewProject layout as well when you do a full page load?
 projectsRoute.get('/:projectId/todos/:todoId', (c) => {
   const { projectId, todoId } = c.req.param()
   const project = PROJECTS[projectId]
