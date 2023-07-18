@@ -45,7 +45,7 @@ projectsRoute.get('/', (c) => {
   // return c.text`get / Projects Route`
   return c.html(ListProjects({ projects }))
 })
-// Example of a route that also funcitons as a layout
+// Example of a route that also functions as a layout
 projectsRoute.get('/:projectId/*', layout(({ context: c, children }) => {
   const { projectId } = c.req.param()
   const project = PROJECTS[projectId]
