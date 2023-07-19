@@ -12,7 +12,7 @@ projectsRoute.get('/', view(({ context }) => {
   const projects = PROJECTS
   return ListProjects({ projects })
 }))
-// TODO write examples of the two routes below, but returning JSX inline, and also extractin into its own component and calling like layout(ViewProject)
+// TODO write examples of the two routes below, but returning JSX inline, and also extracted into its own component and calling like layout(ViewProject)
 // Example of a route that also functions as a layout
 projectsRoute.use('/:projectId/*', layout(({ context, children }) => {
   const { projectId } = context.req.param()
