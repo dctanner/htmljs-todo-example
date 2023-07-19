@@ -44,6 +44,7 @@ todosRoute.put('/:todoId', view(async ({ context }) => {
     todo,
   })
 }))
+// TODO make editing form inline with todo list
 todosRoute.get('/:todoId/edit', view(async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
