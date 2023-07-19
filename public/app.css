@@ -785,11 +785,6 @@ html {
     color: hsl(var(--bc) / var(--tw-text-opacity));
   }
 
-  .link-primary:hover {
-    --tw-text-opacity: 1;
-    color: hsl(var(--pf) / var(--tw-text-opacity));
-  }
-
   .menu li > *:not(ul):not(details):active,
 .menu li > *:not(ul):not(details).active,
 .menu li > details > summary:active {
@@ -1568,11 +1563,6 @@ html {
   --tw-placeholder-opacity: 0.2;
 }
 
-.link-primary {
-  --tw-text-opacity: 1;
-  color: hsl(var(--p) / var(--tw-text-opacity));
-}
-
 .link:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -1915,22 +1905,8 @@ html {
   background-color: hsl(var(--b1) / var(--tw-bg-opacity));
 }
 
-.bg-base-200 {
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--b2) / var(--tw-bg-opacity));
-}
-
 .p-2 {
   padding: 0.5rem;
-}
-
-.p-6 {
-  padding: 1.5rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
 }
 
 .text-2xl {
@@ -1941,6 +1917,11 @@ html {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .normal-case {
@@ -1956,6 +1937,14 @@ html {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+:root {
+  --animation-btn: 0;
+}
+
+.btn:active:hover, .btn:active:focus {
+  transform: none;
 }
 
 @media (min-width: 768px) {

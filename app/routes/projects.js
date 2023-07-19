@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { view, layout } from '../../htmy'
 import { ListProjects, ViewProject } from '../views/project'
+import { NewTodo } from '../views/todo'
 import MainLayout from '../layouts/main'
 
 const projectsRoute = new Hono()
@@ -20,6 +21,14 @@ projectsRoute.use('/:projectId/*', layout(async ({ context, children }) => {
   const todosQuery = await context.env.DB.prepare("SELECT * FROM todos WHERE project_id = ?").bind(projectId).all();
   project.todos = todosQuery.results
   return ViewProject({ project, children })
+}))
+// Default sub-view when viewing a project is new todo form
+projectsRoute.get('/:projectId/view', view(async ({ context }) => {
+  const { projectId } = context.req.param()
+
+  return NewTodo({
+    projectId,
+  })
 }))
 
 export default projectsRoute

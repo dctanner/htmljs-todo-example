@@ -11,7 +11,7 @@ export const ListProjects = ({ projects }) => (
     <ul class="menu bg-base-100">
       {projects.map((project) => (
         <li id={`todo-${project.id}`}>
-          <Link class="text-blue-500" to={`/projects/${project.id}`}>{project.name}</Link>
+          <Link class="text-blue-500" to={`/projects/${project.id}/view`}>{project.name}</Link>
         </li>
       ))}
     </ul>
@@ -23,10 +23,11 @@ export const ViewProject = ({ project, children }) => (
     <div class="text-sm breadcrumbs">
       <ul>
         <li><Link class="" to="/projects">My Projects</Link></li>
-        <li>{project.text}</li>
+        <li>{project.name}</li>
       </ul>
     </div>
-    <h1 class="text-2xl">{project.text}</h1>
+    <h1 class="text-2xl">{project.name}</h1>
+    <button class="btn" hx-get={`/projects/${project.id}/todos/new`} hx-target="#ViewProjectChildren">Add Todo</button>
     <ListTodos project={project} />
     <div id="ViewProjectChildren">{children}</div>
   </div>
