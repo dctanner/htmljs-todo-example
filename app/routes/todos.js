@@ -1,33 +1,45 @@
 import { Hono } from 'hono'
-import { ListTodos } from '../views/todo'
-import { layout } from '../../htmy'
-import { html } from 'hono/html'
-/** @jsx jsx */
-/** @jsxFrag  Fragment */
-import { jsx } from 'hono/jsx'
+import { view } from '../../htmy'
+import { ViewTodo, EditTodo } from '../views/todo'
+import { PROJECTS } from '../db'
 
-// Route layouts get passed the same props as the route's view
-// TODO find a way to pull out the view's props and pass them here too
-const TodoLayout = (props) => html`
-<main>
-  <h1>Todos</h1>
-  ${props.children}
-</main>
-`
+// We mount todosRoute to '/:projectId/todos' so projectId is present in the params
+const todosRoute = new Hono()
 
-const todoRoute = new Hono()
+// If desired, you can move the logic below into your view function and just pass that to, like this: view(ViewTodo). The advantage of separating out the view from the logic is that you can reuse the view. E.g. we reuse ViewTodo in the .put() route below.
+todosRoute.get('/:todoId', view(({ context }) => {
+  const { projectId, todoId } = context.req.param()
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
 
-todoRoute.get('/:id', (c) => {
-  // Render jsx, either using an imported view function or just write the jsx inline here
-  // return layout(c, <ListTodos todos={todos} />, TodoLayout, { title: 'Todos' })
-  // You can also render by calling the view function
-  // return layout(c, ListTodos({ todos }), TodoLayout)
-  // Or using a html literal
-  // return html`
-  //   <ul>
-  //     <li>Todo 1</li>
-  //   </ul>
-  // `
-})
+  return ViewTodo({
+    project,
+    todo,
+  })
+}))
+todosRoute.get('/:todoId/edit', view(({ context }) => {
+  const { projectId, todoId } = context.req.param()
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
 
-export default todoRoute
+  return EditTodo({
+    project,
+    todo,
+  })
+}))
+todosRoute.put('/:todoId', view(async ({ context }) => {
+  const { projectId, todoId } = context.req.param()
+  // Here we would update the todo in the db
+  const data = await context.req.parseBody()
+  PROJECTS[projectId].todos[todoId].text = data.text
+
+  const project = PROJECTS[projectId]
+  const todo = project.todos[todoId]
+
+  return ViewTodo({
+    project,
+    todo,
+  })
+}))
+
+export default todosRoute
