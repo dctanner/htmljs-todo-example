@@ -29,7 +29,7 @@ const MainLayout = (props) => html`
       </div>
     </div>
   </header>
-  <main>
+  <main class="px-6">
     ${props.children}
   </main>
 </div>
