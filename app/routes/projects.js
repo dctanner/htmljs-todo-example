@@ -40,14 +40,14 @@ const projectsRoute = new Hono()
 
 // TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
 projectsRoute.use('/*', layout(MainLayout))
-projectsRoute.get('/', (c) => {
+projectsRoute.get('/', view(({ context }) => {
   const projects = PROJECTS
   // return c.text`get / Projects Route`
-  return c.html(ListProjects({ projects }))
-})
+  return ListProjects({ projects })
+}))
 // TODO write examples of the two routes below, but returning JSX inline, and also extractin into its own component and calling like layout(ViewProject)
 // Example of a route that also functions as a layout
-projectsRoute.get('/:projectId/*', layout(({ context, children }) => {
+projectsRoute.use('/:projectId/*', layout(({ context, children }) => {
   const { projectId } = context.req.param()
   const project = PROJECTS[projectId]
 
@@ -63,30 +63,29 @@ projectsRoute.get('/:projectId/todos/:todoId', view(({ context }) => {
     todo,
   })
 }))
-projectsRoute.get('/:projectId/todos/:todoId/edit', (c) => {
-  const { projectId, todoId } = c.req.param()
+projectsRoute.get('/:projectId/todos/:todoId/edit', view(({ context }) => {
+  const { projectId, todoId } = context.req.param()
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
-  return layout(c, [EditTodo, ViewProject, ProjectsLayout, MainLayout], {
-    title: `Edit ${todo.text}`,
+
+  return EditTodo({
     project,
     todo,
   })
-})
-projectsRoute.put('/:projectId/todos/:todoId', async (c) => {
-  const { projectId, todoId } = c.req.param()
+}))
+projectsRoute.put('/:projectId/todos/:todoId', view(async ({ context }) => {
+  const { projectId, todoId } = context.req.param()
   // Here we would update the todo in the db
-  const data = await c.req.parseBody()
+  const data = await context.req.parseBody()
   PROJECTS[projectId].todos[todoId].text = data.text
 
   const project = PROJECTS[projectId]
   const todo = project.todos[todoId]
   // TODO we must revalidate ViewProject to refesh the list of todos
-  return layout(c, [ViewTodo, ViewProject, ProjectsLayout, MainLayout], {
-    title: `Edit ${todo.text}`,
+  return ViewTodo({
     project,
     todo,
   })
-})
+}))
 
 export default projectsRoute
