@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "wrangler dev --assets ./public --log-level",
+    "dev": "wrangler dev --assets ./public --log-level --d1=DB --persist",
     "dev:css": "tailwindcss -i ./app/app.css -o ./public/app.css --watch",
     "deploy": "tailwindcss -i ./app/app.css -o ./public/app.css --minify && wrangler deploy --assets ./public"
   },

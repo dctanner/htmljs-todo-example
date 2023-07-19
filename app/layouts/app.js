@@ -7,8 +7,8 @@ const AppLayout = (props) => html`
   <meta charset="UTF-8">
   <title>${props.title}</title>
   <meta name="description" content="${props.description}">
-  <script src="https://unpkg.com/htmx.org@1.9.3" integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/idiomorph/dist/idiomorph-ext.min.js"></script>
+  <script src="/htmx.min.js"></script>
+  <script src="/idiomorph-ext.min.js"></script>
   <link rel="stylesheet" href="/app.css">
 </head>
 <body>
