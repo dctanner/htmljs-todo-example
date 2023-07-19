@@ -50,7 +50,7 @@ export const rootLayout = (layoutToApply) => {
       // Req is a normal request, so we render the whole page which means adding the root layout
       const curBody = await c.res.text()
       c.res = undefined // To overwrite res, set it to undefined before setting new value https://github.com/honojs/hono/pull/970 released in https://github.com/honojs/hono/releases/tag/v3.1.0
-      const newBody = await layoutToApply({ children: html(curBody) })
+      const newBody = await layoutToApply({ context: c, children: html(curBody) })
       c.res = c.html(newBody)
     }
     // Else do nothing and let the original response be sent
