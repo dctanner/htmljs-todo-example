@@ -11,7 +11,7 @@ export const ListProjects = ({ projects }) => (
     <ul class="menu bg-base-100">
       {projects.map((project) => (
         <li id={`todo-${project.id}`}>
-          <Link class="text-blue-500" to={`/projects/${project.id}`}>{project.text}</Link>
+          <Link class="text-blue-500" to={`/projects/${project.id}`}>{project.name}</Link>
         </li>
       ))}
     </ul>

@@ -1,0 +1,8 @@
+name = "htmy-todo-example"
+main = "app/app.js"
+compatibility_date = "2023-01-01"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "htmly-todo-example"
+database_id = "2383046a-e6ee-405e-9b84-6abc30fb5853"
