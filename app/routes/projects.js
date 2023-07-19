@@ -53,6 +53,7 @@ projectsRoute.use('/:projectId/*', layout(({ context, children }) => {
 
   return ViewProject({ project, children })
 }))
+// If desired, you can move the logic below into your view function and just pass that to, like this: view(ViewTodo). The advantage of separating out the view from the logic is that you can reuse the view. E.g. we reuse ViewTodo in the .put() route below.
 projectsRoute.get('/:projectId/todos/:todoId', view(({ context }) => {
   const { projectId, todoId } = context.req.param()
   const project = PROJECTS[projectId]
