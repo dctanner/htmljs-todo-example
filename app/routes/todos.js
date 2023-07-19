@@ -4,6 +4,7 @@ import { ViewTodo, EditTodo } from '../views/todo'
 import { PROJECTS } from '../db'
 
 // We mount todosRoute to '/:projectId/todos' so projectId is present in the params
+// ViewProject is also applied as a layout to /:projectId/* so all routes below are rendered within it
 const todosRoute = new Hono()
 
 // If desired, you can move the logic below into your view function and just pass that to, like this: view(ViewTodo). The advantage of separating out the view from the logic is that you can reuse the view. E.g. we reuse ViewTodo in the .put() route below.
