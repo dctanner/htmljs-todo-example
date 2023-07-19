@@ -18,7 +18,7 @@ export const ViewTodo = ({ projectId, todo }) => (
   <div>
     <h2 class="text-xl">{todo.name}</h2>
     <button class="btn" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
-    <button class="btn btn-outline">Delete</button>
+    <button class="btn btn-outline" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-boosted="true">Delete</button>
   </div>
 )
 

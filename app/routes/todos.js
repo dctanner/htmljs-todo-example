@@ -36,5 +36,13 @@ todosRoute.put('/:todoId', view(async ({ context }) => {
     todo,
   })
 }))
+// https://htmx.org/docs/#response-headers
+// Submitting a form via htmx has the benefit of no longer needing the Post/Redirect/Get Pattern. After successfully processing a POST request on the server, you don’t need to return a HTTP 302 (Redirect). You can directly return the new HTML fragment.
+// In this case the route /:todoId will be 404 for the deleted todo, so we do need to redirect, which we do by setting to HX-Location header
+todosRoute.delete('/:todoId', view(async ({ context }) => {
+  const { projectId, todoId } = context.req.param()
+  await context.env.DB.prepare("DELETE FROM todos WHERE id = ?").bind(todoId).run();
+  context.header('HX-Location', `/projects/${projectId}`)
+}))
 
 export default todosRoute
