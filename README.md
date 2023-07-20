@@ -7,7 +7,7 @@ html.js is an elegent framework for hyper speed web apps.
 A html.js app is server side js that returns html
 to the browser. 
 Every function you write in html.js is actually a jsx component (but no React), which makes html layouts and views easy to write.
-When the user clicks a link or submits a form, htmx is used to turn these into ajax requests. When html.js recrives and ajax request it only returns the snippet of html on the page that needs updating.
+When the user clicks a link or submits a form, htmx is used to turn these into ajax requests. When your app receives an ajax request it only returns the snippet of html on the page that needs updating.
 If js is disabled or you're a search engine, the full html page is returned. 
 
 html.js apps deploy almost anywhere, but are optimized for Cloudflare and Vercel. 
