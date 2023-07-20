@@ -5,6 +5,7 @@ import { Link } from '../../htmy';
 
 const MainLayout = async (props) => {
   const { results: projects } = await props.context.env.DB.prepare("SELECT * FROM projects").all();
+  const path = new URL(props.context.req.url).pathname
   return (
     <div>
       <header class="fixed top-0 z-[60] flex items-center justify-center w-full h-16 duration-500 ease-out bg-white border-b bg-opacity-90 backdrop-blur-md border-neutral-400 border-opacity-20">
@@ -36,15 +37,11 @@ const MainLayout = async (props) => {
 
       <main class="relative flex items-start min-h-screen 2xl:px-0 lg:px-4 px-5 pt-0 pb-0 mx-auto mt-1 max-w-7xl rounded-t-3xl">
         <aside class="fixed block w-56 h-screen max-h-screen pt-20 pb-5 pr-5 overflow-scroll bg-white lg:pt-8 lg:pb-16 z-20 top-[55px]">
-          <div class="flex flex-col w-full">
-            <h1 class="text-2xl">My Projects</h1>
-            <ul class="menu bg-base-100">
-              {projects.map((project) => (
-                <li id={`todo-${project.id}`}>
-                  <Link class="text-blue-500" to={`/projects/${project.id}/view`}>{project.name}</Link>
-                </li>
-              ))}
-            </ul>
+          <h2 class="relative px-2 py-1 mb-2 text-sm font-semibold rounded-md">My Projects</h2>
+          <div class="relative grid grid-flow-row text-sm mb-7 auto-rows-max">
+            {projects.map((project) => (
+              <Link class={`group flex w-full items-center rounded-md border px-2 py-1.5 ${path === `/projects/${project.id}/view` ? 'bg-gray-100 border-gray-200/60' : 'border-transparent'}`} to={`/projects/${project.id}/view`}>{project.name}</Link>
+            ))}
           </div>
         </aside>
         <div id="content" class="relative flex-shrink-0 w-full h-auto py-5 pr-0 lg:pl-64 lg:pr-64">
