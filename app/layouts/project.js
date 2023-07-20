@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
-import { TodoListForProject, TodoForm } from '../routes/todos';
+import { TodoListForProject, NewTodoForm } from '../routes/todos';
 
 const ProjectLayout = async ({ context, children }) => {
   const { projectId } = context.req.param()
@@ -14,7 +14,7 @@ const ProjectLayout = async ({ context, children }) => {
       <div class="w-1/2">
         <h2 class="mb-2 text-lg font-semibold ">{project.name}</h2>
         <TodoListForProject project={project} />
-        <TodoForm projectId={projectId} />
+        <NewTodoForm projectId={projectId} />
       </div>
       <div id="ViewProjectChildren" class="w-1/2">{children}</div>
     </div>

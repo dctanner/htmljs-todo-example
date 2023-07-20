@@ -3,12 +3,12 @@
 import { jsx } from 'hono/jsx'
 import { Link, Form } from '../../htmy'
 
-export const TodoForm = ({ projectId }) => (
+export const NewTodoForm = ({ projectId }) => (
   // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
   <Form action={`/projects/${projectId}/todos/new`} method="post">
-    <div class="flex gap-2 mt-4">
+    <div class="flex gap-2 mt-4 pt-6 border-t border-gray-100  ">
       <input type="text" name="name" placeholder="Todo name..." autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
-      <button class="btn" type="submit">Create</button>
+      <button class="btn" type="submit">Add todo</button>
     </div>
   </Form>
 )
