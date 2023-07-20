@@ -14,8 +14,8 @@ html.js apps deploy almost anywhere, but are optimized for Cloudflare and Vercel
 
 The foundations of html.js are built using the following excellent libraries:
 
-- hono.dev provides a familiar express style router and jsx
-- htmx.org powers ajax partial html fetching
+- [hono.dev](https://hono.dev) provides a familiar express style router and jsx
+- [htmx.org](https://htmx.org) powers ajax partial html fetching
 
 ## Todo example app
 
