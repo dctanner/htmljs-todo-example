@@ -1,18 +1,19 @@
+/** @jsx jsx */
+/** @jsxFrag  Fragment */
+import { jsx } from 'hono/jsx'
 import { Hono } from 'hono'
 import { rootLayout, layout, view } from '../htmy'
 import AppLayout from './layouts/app'
 import MainLayout from './layouts/main'
-import TodosLayout from './layouts/todos'
-import { GetProject } from './routes/projects'
-import { CreateTodo, DeleteTodo, EditTodo, GetTodo, NewTodo, UpdateTodo } from './routes/todos'
+import ProjectLayout from './layouts/project'
+import { CreateTodo, DeleteTodo, EditTodo, GetTodo, UpdateTodo } from './routes/todos'
 
 const app = new Hono()
 
 app.use('*', rootLayout(AppLayout))
 app.use('*', layout(MainLayout))
-app.use('/projects/:projectId/*', layout(TodosLayout)) // Example of a nested layout
-app.get('/projects/:projectId/view', view(GetProject))
-app.get('/projects/:projectId/todos/new', view(NewTodo))
+app.use('/projects/:projectId/*', layout(ProjectLayout)) // Example of a nested layout
+app.get('/projects/:projectId/view', view(() => <div></div>)) // ProjectLayout is where the project is actually rendered. Here we just return the right sidebar content where we show the selected todo, which is blank when first viewing a project
 app.post('/projects/:projectId/todos/new', view(CreateTodo))
 app.get('/projects/:projectId/todos/:todoId', view(GetTodo))
 app.put('/projects/:projectId/todos/:todoId', view(UpdateTodo))

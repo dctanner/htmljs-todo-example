@@ -6,8 +6,8 @@ import { Link, Form } from '../../htmy'
 export const TodoForm = ({ projectId }) => (
   // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
   <Form action={`/projects/${projectId}/todos/new`} method="post">
-    <div class="flex gap-2">
-      <input type="text" name="name" placeholder="Todo name..." class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
+    <div class="flex gap-2 mt-4">
+      <input type="text" name="name" placeholder="Todo name..." autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
       <button class="btn" type="submit">Create</button>
     </div>
   </Form>
@@ -33,20 +33,13 @@ export const TodoListForProject = ({ project }) => (
   </ul>
 )
 
-export const NewTodo = async ({ context }) => {
-  const { projectId } = context.req.param()
-
-  return <TodoForm projectId={projectId} />
-}
-
 export const CreateTodo = async ({ context }) => {
   const { projectId } = context.req.param()
   const data = await context.req.parseBody()
   // TODO validate data.name isn't blank
   await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(data.name, projectId).first();
-
-  // Show the new todo form again after creating a todo
-  return <TodoForm projectId={projectId} />
+  context.header('HX-Push', `/projects/${projectId}/view`)
+  return <div></div>
 }
 
 export const GetTodo = async ({ context }) => {
@@ -73,7 +66,7 @@ export const EditTodo = async ({ context }) => {
   return (
     <Form action={`/projects/${projectId}/todos/${todo.id}`} method="put">
       <div class="flex gap-2">
-        <input type="text" name="name" value={todo.name} class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
+        <input type="text" name="name" value={todo.name} autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
         <button class="btn" type="submit">Save</button>
       </div>
     </Form>
@@ -91,5 +84,5 @@ export const DeleteTodo = async ({ context }) => {
   // context.header('HX-Redirect', `/projects/${projectId}/view`)
   // 2. Set HX-Push which updates the browser URL, and then return NewTodo which we want to show after deleting a todo, which is rendered and replaces the body
   context.header('HX-Push', `/projects/${projectId}/view`)
-  return <TodoForm projectId={projectId} />
+  return <div></div>
 }
