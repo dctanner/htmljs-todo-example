@@ -1,5 +1,4 @@
 import { html } from 'hono/html'
-import AppLayout from './app/layouts/app.js'
 
 // TODO create our own extension of Hono's class, that lets you set a default route layout and automatically wraps html/jsx returned from a route in this layout() function
 // template is an array of html/jsx literals, the first is the final view to render and never takes the children prop, every additional array item is a layout component that must take the children prop

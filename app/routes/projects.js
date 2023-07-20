@@ -1,34 +1,51 @@
-import { Hono } from 'hono'
-import { view, layout } from '../../htmy'
-import { ListProjects, ViewProject } from '../views/project'
-import { NewTodo } from '../views/todo'
-import MainLayout from '../layouts/main'
+/** @jsx jsx */
+/** @jsxFrag  Fragment */
+import { jsx } from 'hono/jsx'
+import { Link } from '../../htmy'
+import { TodoForm, TodoListForProject } from './todos'
 
-const projectsRoute = new Hono()
+export const GetProject = async ({ context }) => {
+  const { projectId } = context.req.param()
 
-// TODO run the actual route code when rendering each layout, and then put all the returned values into an object we pass along, like Remix does with routes. This way we don't have to make sure each route loads all the data that all the layouts it uses needs
-projectsRoute.use('/*', layout(MainLayout))
-projectsRoute.get('/', view(async ({ context }) => {
+  // Default sub-view when viewing a project is new todo form
+  return <TodoForm projectId={projectId} />
+}
+
+export const ListProjects = async ({ context }) => {
   const { results: projects } = await context.env.DB.prepare("SELECT * FROM projects").all();
 
-  return ListProjects({ projects })
-}))
-// TODO write examples of the two routes below, but returning JSX inline, and also extracted into its own component and calling like layout(ViewProject)
-// Example of a route that also functions as a layout
-projectsRoute.use('/:projectId/*', layout(async ({ context, children }) => {
+  return (
+    <div>
+      <h1 class="text-2xl">My Projects</h1>
+      <ul class="menu bg-base-100">
+        {projects.map((project) => (
+          <li id={`todo-${project.id}`}>
+            <Link class="text-blue-500" to={`/projects/${project.id}/view`}>{project.name}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export const ProjectLayout = async ({ context, children }) => {
   const { projectId } = context.req.param()
   const project = await context.env.DB.prepare("SELECT * FROM projects WHERE id = ?").bind(projectId).first();
   const todosQuery = await context.env.DB.prepare("SELECT * FROM todos WHERE project_id = ?").bind(projectId).all();
   project.todos = todosQuery.results
-  return ViewProject({ project, children })
-}))
-// Default sub-view when viewing a project is new todo form
-projectsRoute.get('/:projectId/view', view(async ({ context }) => {
-  const { projectId } = context.req.param()
 
-  return NewTodo({
-    projectId,
-  })
-}))
-
-export default projectsRoute
+  return (
+    <div>
+      <div class="text-sm breadcrumbs">
+        <ul>
+          <li><Link class="" to="/projects">My Projects</Link></li>
+          <li>{project.name}</li>
+        </ul>
+      </div>
+      <h1 class="text-2xl">{project.name}</h1>
+      <button class="btn" hx-get={`/projects/${project.id}/todos/new`} hx-target="#ViewProjectChildren">Add Todo</button>
+      <TodoListForProject project={project} />
+      <div id="ViewProjectChildren">{children}</div>
+    </div>
+  )
+}

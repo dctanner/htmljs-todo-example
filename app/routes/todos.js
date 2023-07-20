@@ -1,63 +1,87 @@
-import { Hono } from 'hono'
-import { view } from '../../htmy'
-import { ViewTodo, NewTodo, EditTodo } from '../views/todo'
+/** @jsx jsx */
+/** @jsxFrag  Fragment */
+import { jsx } from 'hono/jsx'
+import { Link, Form } from '../../htmy'
 
-// We mount todosRoute to '/:projectId/todos' so projectId is present in the params
-// ViewProject is also applied as a layout to /:projectId/* so all routes below are rendered within it
-const todosRoute = new Hono()
+export const TodoForm = ({ projectId }) => (
+  // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
+  <Form action={`/projects/${projectId}/todos/new`} method="post">
+    <div class="flex gap-2">
+      <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" placeholder="Todo name..." />
+      <button class="btn btn-sm btn-primary" type="submit">Create</button>
+    </div>
+  </Form>
+)
 
-// If desired, you can move the logic below into your view function and just pass that to, like this: view(ViewTodo). The advantage of separating out the view from the logic is that you can reuse the view. E.g. we reuse ViewTodo in the .put() route below.
-todosRoute.get('/new', view(async ({ context }) => {
+export const TodoView = ({ projectId, todo }) => (
+  <div class="flex gap-2">
+    <h2 class="text-xl">{todo.name}</h2>
+    <button class="btn btn-sm" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
+    <button class="btn btn-sm" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-target="body">Delete</button>
+  </div>
+)
+
+export const TodoListForProject = ({ project }) => (
+  <ul class="menu bg-base-100">
+    {project.todos.map((todo) => (
+      <li id={`todo-${todo.id}`}>
+        <Link class="text-blue-500" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name}</Link>
+      </li>
+    ))}
+  </ul>
+)
+
+export const NewTodo = async ({ context }) => {
   const { projectId } = context.req.param()
 
-  return NewTodo({
-    projectId,
-  })
-}))
-todosRoute.post('/new', view(async ({ context }) => {
+  return <TodoForm projectId={projectId} />
+}
+
+export const CreateTodo = async ({ context }) => {
   const { projectId } = context.req.param()
   const data = await context.req.parseBody()
   // TODO validate data.name isn't blank
-  const todo = await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(data.name, projectId).first();
+  await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(data.name, projectId).first();
 
-  return NewTodo({
-    projectId,
-  })
-}))
-todosRoute.get('/:todoId', view(async ({ context }) => {
+  // Show the new todo form again after creating a todo
+  return <TodoForm projectId={projectId} />
+}
+
+export const GetTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
 
-  return ViewTodo({
-    projectId,
-    todo,
-  })
-}))
-todosRoute.put('/:todoId', view(async ({ context }) => {
+  return <TodoView projectId={projectId} todo={todo} />
+}
+
+export const UpdateTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const data = await context.req.parseBody()
   // TODO validate data.name isn't blank
   const todo = await context.env.DB.prepare("UPDATE todos SET name = ? WHERE id = ? RETURNING *").bind(data.name, todoId).first();
 
-  return ViewTodo({
-    projectId,
-    todo,
-  })
-}))
+  return <TodoView projectId={projectId} todo={todo} />
+}
+
 // TODO make editing form inline with todo list
-todosRoute.get('/:todoId/edit', view(async ({ context }) => {
+export const EditTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
 
-  return EditTodo({
-    projectId,
-    todo,
-  })
-}))
+  return (
+    <Form action={`/projects/${projectId}/todos/${todo.id}`} method="put">
+      <div class="flex gap-2">
+        <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" value={todo.name} />
+        <button class="btn btn-sm btn-primary" type="submit">Save</button>
+      </div>
+    </Form>
+  )
+}
+
 // https://htmx.org/docs/#response-headers
 // Submitting a form via htmx has the benefit of no longer needing the Post/Redirect/Get Pattern. After successfully processing a POST request on the server, you don’t need to return a HTTP 302 (Redirect). You can directly return the new HTML fragment.
 // In this case the route /:todoId will be 404 for the deleted todo, so we do need to redirect, which we do by setting to HX-Location header
-todosRoute.delete('/:todoId', view(async ({ context }) => {
+export const DeleteTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   await context.env.DB.prepare("DELETE FROM todos WHERE id = ?").bind(todoId).run();
   // Two ways to redirect:
@@ -65,9 +89,5 @@ todosRoute.delete('/:todoId', view(async ({ context }) => {
   // context.header('HX-Redirect', `/projects/${projectId}/view`)
   // 2. Set HX-Push which updates the browser URL, and then return NewTodo which we want to show after deleting a todo, which is rendered and replaces the body
   context.header('HX-Push', `/projects/${projectId}/view`)
-  return NewTodo({
-    projectId,
-  })
-}))
-
-export default todosRoute
+  return <TodoForm projectId={projectId} />
+}
