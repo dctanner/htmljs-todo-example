@@ -9,6 +9,7 @@ const AppLayout = (props) => html`
   <meta name="description" content="${props.description}">
   <script src="/htmx.min.js"></script>
   <script src="/idiomorph-ext.min.js"></script>
+  <script src="/alpine.min.js"></script>
   <link rel="stylesheet" href="/app.css">
 </head>
 <body>
