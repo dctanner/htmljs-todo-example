@@ -10,11 +10,12 @@ const TodosLayout = async ({ context, children }) => {
   project.todos = todosQuery.results
 
   return (
-    <div>
-      <h1 class="text-2xl">{project.name}</h1>
-      <button class="btn" hx-get={`/projects/${project.id}/todos/new`} hx-target="#ViewProjectChildren">Add Todo</button>
-      <TodoListForProject project={project} />
-      <div id="ViewProjectChildren">{children}</div>
+    <div class="flex">
+      <div class="w-1/2">
+        <h2 class="mb-2 text-lg font-semibold ">{project.name}</h2>
+        <TodoListForProject project={project} />
+      </div>
+      <div id="ViewProjectChildren" class="w-1/2">{children}</div>
     </div>
   )
 }

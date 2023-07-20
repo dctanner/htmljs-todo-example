@@ -14,18 +14,20 @@ export const TodoForm = ({ projectId }) => (
 )
 
 export const TodoView = ({ projectId, todo }) => (
-  <div class="flex gap-2">
+  <div class="flex justify-between gap-2">
     <h2 class="text-xl">{todo.name}</h2>
-    <button class="btn-outline" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
-    <button class="btn-outline" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-target="body">Delete</button>
+    <div class="flex gap-2">
+      <button class="btn-outline" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
+      <button class="btn-outline" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-target="body">Delete</button>
+    </div>
   </div>
 )
 
 export const TodoListForProject = ({ project }) => (
   <ul class="menu bg-base-100">
     {project.todos.map((todo) => (
-      <li id={`todo-${todo.id}`}>
-        <Link class="text-blue-500" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name}</Link>
+      <li id={`todo-${todo.id}`} class="">
+        <Link class="text-md py-1.5 block hover:underline" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name || "Blank Name"}</Link>
       </li>
     ))}
   </ul>
