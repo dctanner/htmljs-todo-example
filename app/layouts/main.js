@@ -39,7 +39,7 @@ const MainLayout = async (props) => {
           <h2 class="relative px-2 py-1 mb-2 text-sm font-semibold rounded-md">My Projects</h2>
           <div class="relative grid grid-flow-row text-sm mb-7 auto-rows-max">
             {projects.map((project) => (
-              <Link class={`group flex w-full items-center rounded-md border px-2 py-1.5 ${path === `/projects/${project.id}/view` ? 'bg-gray-100 border-gray-200/60' : 'border-transparent'}`} to={`/projects/${project.id}/view`}>{project.name}</Link>
+              <Link class={`group flex w-full items-center rounded-md border px-2 py-1.5 ${path.startsWith(`/projects/${project.id}`) ? 'bg-gray-100 border-gray-200/60' : 'border-transparent'}`} to={`/projects/${project.id}/view`}>{project.name}</Link>
             ))}
           </div>
         </aside>
