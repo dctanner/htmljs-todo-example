@@ -7,7 +7,7 @@ export const TodoForm = ({ projectId }) => (
   // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
   <Form action={`/projects/${projectId}/todos/new`} method="post">
     <div class="flex gap-2">
-      <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" placeholder="Todo name..." />
+      <input type="text" name="name" placeholder="Todo name..." class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
       <button class="btn" type="submit">Create</button>
     </div>
   </Form>
@@ -71,7 +71,7 @@ export const EditTodo = async ({ context }) => {
   return (
     <Form action={`/projects/${projectId}/todos/${todo.id}`} method="put">
       <div class="flex gap-2">
-        <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" value={todo.name} />
+        <input type="text" name="name" value={todo.name} class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
         <button class="btn" type="submit">Save</button>
       </div>
     </Form>
