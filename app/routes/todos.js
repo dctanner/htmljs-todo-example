@@ -8,7 +8,7 @@ export const TodoForm = ({ projectId }) => (
   <Form action={`/projects/${projectId}/todos/new`} method="post">
     <div class="flex gap-2">
       <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" placeholder="Todo name..." />
-      <button class="btn btn-sm btn-primary" type="submit">Create</button>
+      <button class="btn" type="submit">Create</button>
     </div>
   </Form>
 )
@@ -16,8 +16,8 @@ export const TodoForm = ({ projectId }) => (
 export const TodoView = ({ projectId, todo }) => (
   <div class="flex gap-2">
     <h2 class="text-xl">{todo.name}</h2>
-    <button class="btn btn-sm" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
-    <button class="btn btn-sm" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-target="body">Delete</button>
+    <button class="btn-outline" hx-get={`/projects/${projectId}/todos/${todo.id}/edit`} hx-target="#ViewProjectChildren">Edit</button>
+    <button class="btn-outline" hx-delete={`/projects/${projectId}/todos/${todo.id}`} hx-target="body">Delete</button>
   </div>
 )
 
@@ -72,7 +72,7 @@ export const EditTodo = async ({ context }) => {
     <Form action={`/projects/${projectId}/todos/${todo.id}`} method="put">
       <div class="flex gap-2">
         <input type="text" name="name" class="input input-bordered w-full max-w-xs input-sm" value={todo.name} />
-        <button class="btn btn-sm btn-primary" type="submit">Save</button>
+        <button class="btn" type="submit">Save</button>
       </div>
     </Form>
   )

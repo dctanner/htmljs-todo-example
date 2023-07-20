@@ -17,10 +17,10 @@ const MainLayout = async (props) => {
               <span class="flex opacity-90 group-hover:scale-150 group-hover:opacity-100 items-center h-full group-hover:-rotate-6 ease-out duration-500 px-0.5 py-px ml-2 -translate-x-px text-[0.65rem] font-bold leading-none border-[2px] rounded border-black -translate-y-px">DEMO</span>
             </a>
             <nav class="items-center hidden space-x-5 text-sm font-medium lg:flex">
-              <a class="relative transition-colors text-neutral-700 hover:text-black group" href="/projects">
+              {/* <a class="relative transition-colors text-neutral-700 hover:text-black group" href="/">
                 <span>Projects</span>
                 <span class="absolute bottom-0 w-0 h-0.5 duration-300 ease-out bg-black group-hover:w-full left-1/2 group-hover:left-0 group-hover:-translate-x-0"></span>
-              </a>
+              </a> */}
             </nav>
           </div>
           <div class="relative space-x-1 font-medium leading-10 sm:space-x-2 md:flex-grow-0 md:flex-shrink-0 md:text-right lg:flex-grow-0 lg:flex-shrink-0">
