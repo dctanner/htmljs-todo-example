@@ -2,7 +2,7 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 import { Hono } from 'hono'
-import { rootLayout, layout, view } from '../htmy'
+import { rootLayout, layout, view } from '../htmljs'
 import AppLayout from './layouts/app'
 import MainLayout from './layouts/main'
 import ProjectLayout from './layouts/project'
