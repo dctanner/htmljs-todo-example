@@ -6,7 +6,7 @@ import { rootLayout, layout, view } from '../htmy'
 import AppLayout from './layouts/app'
 import MainLayout from './layouts/main'
 import ProjectLayout from './layouts/project'
-import { CreateTodo, DeleteTodo, EditTodo, GetTodo, UpdateTodo } from './routes/todos'
+import { CreateTodo, DeleteTodo, EditTodo, GetTodo, UpdateTodo, UpdateTodoState } from './routes/todos'
 
 const app = new Hono()
 
@@ -17,6 +17,7 @@ app.get('/projects/:projectId/view', view(() => <div></div>)) // ProjectLayout i
 app.post('/projects/:projectId/todos/new', view(CreateTodo))
 app.get('/projects/:projectId/todos/:todoId', view(GetTodo))
 app.put('/projects/:projectId/todos/:todoId', view(UpdateTodo))
+app.put('/projects/:projectId/todos/:todoId/state', view(UpdateTodoState))
 app.delete('/projects/:projectId/todos/:todoId', view(DeleteTodo))
 app.get('/projects/:projectId/todos/:todoId/edit', view(EditTodo))
 

@@ -78,19 +78,19 @@ export const Link = ({ to, "hx-target": hxTarget, "class": className, children }
   }
 }
 
-export const Form = ({ action, method, "hx-target": hxTarget, children }) => {
+export const Form = ({ action, method, "hx-target": hxTarget, "hx-trigger": hxTrigger, "class": className, children }) => {
   if (hxTarget) {
     switch (method) {
       case "get":
-        return html`<form hx-get="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
+        return html`<form class="${className}" hx-get="${action}" hx-target="${hxTarget}" hx-trigger="${hxTrigger}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "post":
-        return html`<form hx-post="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
+        return html`<form class="${className}" hx-post="${action}" hx-target="${hxTarget}" hx-trigger="${hxTrigger}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "put":
-        return html`<form hx-put="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
+        return html`<form class="${className}" hx-put="${action}" hx-target="${hxTarget}" hx-trigger="${hxTrigger}" hx-push-url="true" hx-swap="morph">${children}</form>`
       case "delete":
-        return html`<form hx-delete="${action}" hx-target="${hxTarget}" hx-push-url="true" hx-swap="morph">${children}</form>`
+        return html`<form class="${className}" hx-delete="${action}" hx-target="${hxTarget}" hx-trigger="${hxTrigger}" hx-push-url="true" hx-swap="morph">${children}</form>`
     }
   } else {
-    return html`<form action="${action}" method="${method}" hx-boost="true">${children}</form>`
+    return html`<form class="${className}" action="${action}" method="${method}" hx-trigger="${hxTrigger}" hx-boost="true">${children}</form>`
   }
 }

@@ -23,12 +23,26 @@ export const TodoView = ({ projectId, todo }) => (
   </div>
 )
 
+export const TodoListItem = ({ todo, projectId }) => (
+  <li id={`todo-${todo.id}`} class="flex items-center gap-2">
+    <Form action={`/projects/${projectId}/todos/${todo.id}/state`} method="put" hx-trigger="mouseup delay:50ms" hx-target={`#todo-${todo.id}`} class="m-0">
+      <input name={`todo-${todo.id}-checkbox`} id={`todo-${todo.id}-checkbox`} type="checkbox" class="hidden peer" checked={!!todo.done} />
+      <label for={`todo-${todo.id}-checkbox`} class="peer-checked:[&_svg]:scale-100 text-sm font-medium text-neutral-600 peer-checked:text-blue-600 [&_svg]:scale-0 peer-checked:[&_.custom-checkbox]:border-blue-500 peer-checked:[&_.custom-checkbox]:bg-blue-500 select-none flex items-center space-x-2">
+        <span class="flex items-center justify-center w-5 h-5 border-2 rounded-full custom-checkbox text-neutral-900">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3 h-3 text-white duration-300 ease-out">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </span>
+      </label>
+    </Form>
+    <Link class={`flex-grow text-md py-1.5 block hover:underline ${todo.done && 'line-through hover:line-through'}`} to={`/projects/${projectId}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name || "Blank Name"}</Link>
+  </li>
+)
+
 export const TodoListForProject = ({ project }) => (
   <ul class="menu bg-base-100">
     {project.todos.map((todo) => (
-      <li id={`todo-${todo.id}`} class="">
-        <Link class="text-md py-1.5 block hover:underline" to={`/projects/${project.id}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name || "Blank Name"}</Link>
-      </li>
+      <TodoListItem todo={todo} projectId={project.id} />
     ))}
   </ul>
 )
@@ -56,6 +70,15 @@ export const UpdateTodo = async ({ context }) => {
   const todo = await context.env.DB.prepare("UPDATE todos SET name = ? WHERE id = ? RETURNING *").bind(data.name, todoId).first();
 
   return <TodoView projectId={projectId} todo={todo} />
+}
+
+export const UpdateTodoState = async ({ context }) => {
+  const { projectId, todoId } = context.req.param()
+  const data = await context.req.parseBody()
+  console.log(`todo-${todoId}-checkbox`, JSON.stringify(data, null, 2))
+  const todo = await context.env.DB.prepare("UPDATE todos SET done = ? WHERE id = ? RETURNING *").bind(data[`todo-${todoId}-checkbox`] === "on" ? 1 : 0, todoId).first();
+
+  return <TodoListItem projectId={projectId} todo={todo} />
 }
 
 // TODO make editing form inline with todo list
