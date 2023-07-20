@@ -1,8 +1,8 @@
-# Exampoe todo app with the html.js framework
+# Example todo app with the html.js framework
 
 ## What is html.js
 
-html.js is an elegent framework for hyper speed web apps.
+html.js is an elegant framework for hyper speed web apps.
 
 A html.js app is server side js that returns html
 to the browser. 
