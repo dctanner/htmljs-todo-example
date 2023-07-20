@@ -25,7 +25,7 @@ export const TodoView = ({ projectId, todo }) => (
 
 export const TodoListItem = ({ todo, projectId }) => (
   <li id={`todo-${todo.id}`} class="flex items-center gap-2">
-    <Form action={`/projects/${projectId}/todos/${todo.id}/state`} method="put" hx-trigger="mouseup delay:50ms" hx-target={`#todo-${todo.id}`} class="m-0">
+    <Form action={`/projects/${projectId}/todos/${todo.id}/state`} method="put" hx-trigger="mouseup delay:50ms" hx-target={`#todo-${todo.id}`} hx-push-url="false" class="m-0">
       <input name={`todo-${todo.id}-checkbox`} id={`todo-${todo.id}-checkbox`} type="checkbox" class="hidden peer" checked={!!todo.done} />
       <label for={`todo-${todo.id}-checkbox`} class="peer-checked:[&_svg]:scale-100 text-sm font-medium text-neutral-600 peer-checked:text-blue-600 [&_svg]:scale-0 peer-checked:[&_.custom-checkbox]:border-blue-500 peer-checked:[&_.custom-checkbox]:bg-blue-500 select-none flex items-center space-x-2">
         <span class="flex items-center justify-center w-5 h-5 border-2 rounded-full custom-checkbox text-neutral-900">
