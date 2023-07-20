@@ -15,7 +15,7 @@ export const ListProjects = async ({ context }) => {
   const { results: projects } = await context.env.DB.prepare("SELECT * FROM projects").all();
 
   return (
-    <div>
+    <div class="flex flex-col w-full">
       <h1 class="text-2xl">My Projects</h1>
       <ul class="menu bg-base-100">
         {projects.map((project) => (

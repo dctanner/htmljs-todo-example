@@ -12,7 +12,7 @@ const AppLayout = (props) => html`
   <script src="/alpine.min.js"></script>
   <link rel="stylesheet" href="/app.css">
 </head>
-<body>
+<body class="pt-16 antialiased">
   ${props.children}
 </body>
 </html>
