@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
-import { Link } from '../../htmy';
+import { Link } from '../../htmljs';
 
 const MainLayout = async (props) => {
   const { results: projects } = await props.context.env.DB.prepare("SELECT * FROM projects").all();
