@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
-import { Link, Form } from '../../htmy'
+import { Link, Form } from '../../htmljs'
 
 export const NewTodoForm = ({ projectId }) => (
   // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
