@@ -4,13 +4,13 @@ import { jsx } from 'hono/jsx'
 import { Link, Form } from '../../htmljs'
 
 export const NewTodoForm = ({ projectId }) => (
-  // Like Link, there is an optional hx-target param which if included will replace the contents of the target element with the response. If omitted, the response will replace the entire body (still using ajax to make it performant). When updating data you will often want to omit hx-target so that everything on the page is updated with the new values.
-  <Form action={`/projects/${projectId}/todos/new`} method="post">
+  // We use hx-boost because we want the whole page to update
+  <form action={`/projects/${projectId}/todos/new`} method="post" hx-boost="true">
     <div class="flex gap-2 mt-4 pt-6 border-t border-gray-100  ">
       <input type="text" name="name" placeholder="Todo name..." autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
       <button class="btn" type="submit">Add todo</button>
     </div>
-  </Form>
+  </form>
 )
 
 export const TodoView = ({ projectId, todo }) => (
@@ -25,7 +25,7 @@ export const TodoView = ({ projectId, todo }) => (
 
 export const TodoListItem = ({ todo, projectId }) => (
   <li id={`todo-${todo.id}`} class="flex items-center gap-2">
-    <Form action={`/projects/${projectId}/todos/${todo.id}/state`} method="put" hx-trigger="mouseup delay:50ms" hx-target={`#todo-${todo.id}`} hx-push-url="false" class="m-0">
+    <form hx-put={`/projects/${projectId}/todos/${todo.id}/state`} hx-trigger="mouseup delay:50ms" hx-target={`#todo-${todo.id}`} hx-push-url="false" class="m-0">
       <input name={`todo-${todo.id}-checkbox`} id={`todo-${todo.id}-checkbox`} type="checkbox" class="hidden peer" checked={!!todo.done} />
       <label for={`todo-${todo.id}-checkbox`} class="peer-checked:[&_svg]:scale-100 text-sm font-medium text-neutral-600 peer-checked:text-blue-600 [&_svg]:scale-0 peer-checked:[&_.custom-checkbox]:border-blue-500 peer-checked:[&_.custom-checkbox]:bg-blue-500 select-none flex items-center space-x-2">
         <span class="flex items-center justify-center w-5 h-5 border-2 rounded-full custom-checkbox text-neutral-900">
@@ -34,7 +34,7 @@ export const TodoListItem = ({ todo, projectId }) => (
           </svg>
         </span>
       </label>
-    </Form>
+    </form>
     <Link class={`flex-grow text-md py-1.5 block hover:underline ${todo.done && 'line-through hover:line-through'}`} to={`/projects/${projectId}/todos/${todo.id}`} hx-target="#ViewProjectChildren">{todo.name || "Blank Name"}</Link>
   </li>
 )
@@ -87,12 +87,12 @@ export const EditTodo = async ({ context }) => {
   const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
 
   return (
-    <Form action={`/projects/${projectId}/todos/${todo.id}`} method="put">
+    <form action={`/projects/${projectId}/todos/${todo.id}`} method="put" hx-push-url="true" hx-boost="true">
       <div class="flex gap-2">
         <input type="text" name="name" value={todo.name} autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
         <button class="btn" type="submit">Save</button>
       </div>
-    </Form>
+    </form>
   )
 }
 
