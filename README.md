@@ -1,6 +1,6 @@
 # Example todo app with the html.js framework
 
-![Screenshot](/Users/dctanner/projects/htmljs/htmljs-todo-example/public/todo-screenshot-1.png)
+![Screenshot](https://github.com/dctanner/htmljs-todo-example/blob/main/public/todo-screenshot-1.png?raw=true)
 
 ## What is html.js
 
