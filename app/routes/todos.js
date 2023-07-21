@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
-import { Link, Form } from '../../htmljs'
+import { Link } from '../../htmljs'
 
 export const NewTodoForm = ({ projectId }) => (
   // We use hx-boost because we want the whole page to update

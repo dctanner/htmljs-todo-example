@@ -1,16 +1,18 @@
-# Exampoe todo app with the html.js framework
+# Example todo app with the html.js framework
+
+![Screenshot](/Users/dctanner/projects/htmljs/htmljs-todo-example/public/todo-screenshot-1.png)
 
 ## What is html.js
 
 html.js is an elegent framework for hyper speed web apps.
 
 A html.js app is server side js that returns html
-to the browser. 
+to the browser.
 Every function you write in html.js is actually a jsx component (but no React), which makes html layouts and views easy to write.
 When the user clicks a link or submits a form, htmx is used to turn these into ajax requests. When your app receives an ajax request it only returns the snippet of html on the page that needs updating.
-If js is disabled or you're a search engine, the full html page is returned. 
+If js is disabled or you're a search engine, the full html page is returned.
 
-html.js apps deploy almost anywhere, but are optimized for Cloudflare and Vercel. 
+html.js apps deploy almost anywhere, but are optimized for Cloudflare and Vercel.
 
 The foundations of html.js are built using the following excellent libraries:
 
@@ -19,7 +21,7 @@ The foundations of html.js are built using the following excellent libraries:
 
 ## Todo example app
 
-This demo is built to deploy to Cloudflare Workers and uses the Cloudflare D1 SQLite db. 
+This demo is built to deploy to Cloudflare Workers and uses the Cloudflare D1 SQLite db.
 
 ## Setup
 
