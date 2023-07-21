@@ -2,14 +2,28 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 import { Link } from '../../htmljs'
+import { z } from 'zod'
 
-export const NewTodoForm = ({ projectId }) => (
+const todoSchema = z.object({
+  name: z.string().min(1),
+})
+
+const FormErrorText = ({ children }) => {
+  return (
+    <p class="text-sm text-red-500 font-semibold mt-1">
+      {children?.join(" ")}
+    </p>
+  )
+}
+
+export const NewTodoForm = ({ projectId, errors }) => (
   // We use hx-boost because we want the whole page to update
-  <form action={`/projects/${projectId}/todos/new`} method="post" hx-boost="true">
+  <form id="new-todo-form" hx-post={`/projects/${projectId}/todos/new`} hx-push-url="false" hx-target="#new-todo-form">
     <div class="flex gap-2 mt-4 pt-6 border-t border-gray-100  ">
       <input type="text" name="name" placeholder="Todo name..." autofocus class="flex w-full h-10 px-3 py-2 text-sm bg-white border rounded-md border-neutral-300 ring-offset-background placeholder:text-neutral-500 focus:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-400 disabled:cursor-not-allowed disabled:opacity-50" />
       <button class="btn" type="submit">Add todo</button>
     </div>
+    <FormErrorText>{errors?.name}</FormErrorText>
   </form>
 )
 
@@ -49,11 +63,16 @@ export const TodoListForProject = ({ project }) => (
 
 export const CreateTodo = async ({ context }) => {
   const { projectId } = context.req.param()
-  const data = await context.req.parseBody()
-  // TODO validate data.name isn't blank
-  await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(data.name, projectId).first();
-  context.header('HX-Push', `/projects/${projectId}/view`)
-  return <div></div>
+  const formData = await context.req.parseBody()
+  const parsed = todoSchema.safeParse(formData)
+  if (parsed.success) {
+    await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(parsed.data.name, projectId).first();
+    context.header('HX-Location', `/projects/${projectId}/view`)
+    return <NewTodoForm projectId={projectId} />
+  } else {
+    console.log('errors', parsed.error.flatten().fieldErrors)
+    return <NewTodoForm projectId={projectId} errors={parsed.error.flatten().fieldErrors} />
+  }
 }
 
 export const GetTodo = async ({ context }) => {
@@ -75,7 +94,6 @@ export const UpdateTodo = async ({ context }) => {
 export const UpdateTodoState = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const data = await context.req.parseBody()
-  console.log(`todo-${todoId}-checkbox`, JSON.stringify(data, null, 2))
   const todo = await context.env.DB.prepare("UPDATE todos SET done = ? WHERE id = ? RETURNING *").bind(data[`todo-${todoId}-checkbox`] === "on" ? 1 : 0, todoId).first();
 
   return <TodoListItem projectId={projectId} todo={todo} />
