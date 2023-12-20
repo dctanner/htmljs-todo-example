@@ -3,6 +3,14 @@
 import { jsx } from 'hono/jsx'
 import { Link } from '../../htmljs'
 import { z } from 'zod'
+import { deleteTodo, 
+  getProjectById, 
+  getTodoById, 
+  getAllProjects, 
+  getTodosByProjectId, 
+  insertTodo, 
+  updateTodoDoneStatus, 
+  updateTodoName } from '../../db/db.js'
 
 const todoSchema = z.object({
   name: z.string().min(1),
@@ -53,20 +61,27 @@ export const TodoListItem = ({ todo, projectId }) => (
   </li>
 )
 
-export const TodoListForProject = ({ project }) => (
+export const TodoListForProject = ({ project }) => { 
+  const projectId=project.id;
+  const todos=getTodosByProjectId(projectId);
+ 
+  console.log("projectId",projectId,"todos",todos)
+  return (
   <ul class="menu bg-base-100">
-    {project.todos.map((todo) => (
+    {todos.map((todo) => (
       <TodoListItem todo={todo} projectId={project.id} />
     ))}
   </ul>
 )
+    }
 
 export const CreateTodo = async ({ context }) => {
   const { projectId } = context.req.param()
   const formData = await context.req.parseBody()
   const parsed = todoSchema.safeParse(formData)
   if (parsed.success) {
-    await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(parsed.data.name, projectId).first();
+    // await context.env.DB.prepare("INSERT INTO todos (name, project_id) VALUES (?, ?) RETURNING *").bind(parsed.data.name, projectId).first();
+    insertTodo(parsed.data.name, projectId);
     context.header('HX-Location', `/projects/${projectId}/view`)
     return <NewTodoForm projectId={projectId} />
   } else {
@@ -77,7 +92,8 @@ export const CreateTodo = async ({ context }) => {
 
 export const GetTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
-  const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
+  // const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
+  const todo =getTodoById(todoId)
 
   return <TodoView projectId={projectId} todo={todo} />
 }
@@ -86,24 +102,24 @@ export const UpdateTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const data = await context.req.parseBody()
   // TODO validate data.name isn't blank
-  const todo = await context.env.DB.prepare("UPDATE todos SET name = ? WHERE id = ? RETURNING *").bind(data.name, todoId).first();
-
+//  const todo = await context.env.DB.prepare("UPDATE todos SET name = ? WHERE id = ? RETURNING *").bind(data.name, todoId).first();
+const todo =updateTodoName(todoId,data.name)
   return <TodoView projectId={projectId} todo={todo} />
 }
 
 export const UpdateTodoState = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
   const data = await context.req.parseBody()
-  const todo = await context.env.DB.prepare("UPDATE todos SET done = ? WHERE id = ? RETURNING *").bind(data[`todo-${todoId}-checkbox`] === "on" ? 1 : 0, todoId).first();
-
+  //const todo = await context.env.DB.prepare("UPDATE todos SET done = ? WHERE id = ? RETURNING *").bind(data[`todo-${todoId}-checkbox`] === "on" ? 1 : 0, todoId).first();
+  const todo =updateTodoDoneStatus(todoId,data[`todo-${todoId}-checkbox`] === "on" ? 1 : 0);
   return <TodoListItem projectId={projectId} todo={todo} />
 }
 
 // TODO make editing form inline with todo list
 export const EditTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
-  const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
-
+  //const todo = await context.env.DB.prepare("SELECT * FROM todos WHERE id = ?").bind(todoId).first();
+  const todo = getTodoById(todoId);
   return (
     <form action={`/projects/${projectId}/todos/${todo.id}`} method="put" hx-push-url="true" hx-boost="true">
       <div class="flex gap-2">
@@ -119,7 +135,8 @@ export const EditTodo = async ({ context }) => {
 // In this case the route /:todoId will be 404 for the deleted todo, so we do need to redirect, which we do by setting to HX-Location header
 export const DeleteTodo = async ({ context }) => {
   const { projectId, todoId } = context.req.param()
-  await context.env.DB.prepare("DELETE FROM todos WHERE id = ?").bind(todoId).run();
+  //await context.env.DB.prepare("DELETE FROM todos WHERE id = ?").bind(todoId).run();
+  deleteTodo(todoId);
   // Two ways to redirect:
   // 1. Set HX-Redirect and htmx will redirect to that URL and replace the body with the response
   // context.header('HX-Redirect', `/projects/${projectId}/view`)
