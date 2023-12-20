@@ -2,9 +2,11 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 import { Link } from '../../htmljs';
+import {getAllProjects} from '../../db/db.js';
 
 const MainLayout = async (props) => {
-  const { results: projects } = await props.context.env.DB.prepare("SELECT * FROM projects").all();
+  const  projects  = getAllProjects();
+ 
   const path = new URL(props.context.req.url).pathname
   return (
     <div>
@@ -38,7 +40,7 @@ const MainLayout = async (props) => {
         <aside class="fixed block w-56 h-screen max-h-screen pt-20 pb-5 pr-5 overflow-scroll bg-white lg:pt-8 lg:pb-16 z-20 top-[55px]">
           <h2 class="relative px-2 py-1 mb-2 text-sm font-semibold rounded-md">My Projects</h2>
           <div class="relative grid grid-flow-row text-sm mb-7 auto-rows-max">
-            {projects.map((project) => (
+            {projects && projects.map((project) => (
               <Link class={`group flex w-full items-center rounded-md border px-2 py-1.5 ${path.startsWith(`/projects/${project.id}`) ? 'bg-gray-100 border-gray-200/60' : 'border-transparent'}`} to={`/projects/${project.id}/view`}>{project.name}</Link>
             ))}
           </div>

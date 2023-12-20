@@ -2,12 +2,14 @@
 /** @jsxFrag  Fragment */
 import { jsx } from 'hono/jsx'
 import { TodoListForProject, NewTodoForm } from '../routes/todos';
+import {getProjectById,getTodoById,getTodosByProjectId} from '../../db/db.js';
 
 const ProjectLayout = async ({ context, children }) => {
   const { projectId } = context.req.param()
-  const project = await context.env.DB.prepare("SELECT * FROM projects WHERE id = ?").bind(projectId).first();
-  const todosQuery = await context.env.DB.prepare("SELECT * FROM todos WHERE project_id = ?").bind(projectId).all();
-  project.todos = todosQuery.results
+  const project = getProjectById(projectId);
+  const todosQuery = getTodosByProjectId(projectId);
+  console.log("todosQuery",projectId,todosQuery,"project",project)
+
 
   return (
     <div class="flex">
